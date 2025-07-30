@@ -1,0 +1,340 @@
+#!/bin/bash
+
+# KishansKraft E-commerce Platform Quick Setup Script
+# This script provides a command-line alternative to the web installer
+
+set -e  # Exit on any error
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Print colored output
+print_status() {
+    echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+print_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $1"
+}
+
+print_warning() {
+    echo -e "${YELLOW}[WARNING]${NC} $1"
+}
+
+print_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
+
+print_header() {
+    echo "========================================"
+    echo "   KishansKraft E-commerce Platform"
+    echo "        Quick Setup Script v1.0"
+    echo "========================================"
+    echo ""
+}
+
+# Check if running as root
+check_root() {
+    if [[ $EUID -eq 0 ]]; then
+        print_warning "Running as root. This is not recommended for development."
+        read -p "Continue anyway? (y/N): " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            exit 1
+        fi
+    fi
+}
+
+# Check system requirements
+check_requirements() {
+    print_status "Checking system requirements..."
+    
+    # Check PHP
+    if ! command -v php &> /dev/null; then
+        print_error "PHP is not installed. Please install PHP 7.4 or higher."
+        exit 1
+    fi
+    
+    PHP_VERSION=$(php -r "echo PHP_VERSION;")
+    print_success "PHP $PHP_VERSION found"
+    
+    # Check MySQL/MariaDB
+    if ! command -v mysql &> /dev/null; then
+        print_warning "MySQL client not found. Make sure MySQL/MariaDB is installed and accessible."
+    else
+        print_success "MySQL client found"
+    fi
+    
+    # Check required PHP extensions
+    print_status "Checking PHP extensions..."
+    extensions=("pdo" "pdo_mysql" "json" "mbstring" "openssl")
+    
+    for ext in "${extensions[@]}"; do
+        if php -m | grep -q "^$ext$"; then
+            print_success "Extension $ext is loaded"
+        else
+            print_error "Extension $ext is missing"
+            exit 1
+        fi
+    done
+}
+
+# Setup directories and permissions
+setup_directories() {
+    print_status "Setting up directories..."
+    
+    directories=("logs" "backend/config" "frontend/assets/images/products" "frontend/assets/images/uploads")
+    
+    for dir in "${directories[@]}"; do
+        if [ ! -d "$dir" ]; then
+            mkdir -p "$dir"
+            print_success "Created directory: $dir"
+        fi
+    done
+    
+    # Set permissions
+    chmod -R 755 .
+    chmod -R 777 logs/
+    
+    print_success "Directories and permissions set up"
+}
+
+# Get database configuration
+get_database_config() {
+    print_status "Database Configuration"
+    echo "Please provide your database connection details:"
+    
+    read -p "Database Host (localhost): " DB_HOST
+    DB_HOST=${DB_HOST:-localhost}
+    
+    read -p "Database Port (3306): " DB_PORT
+    DB_PORT=${DB_PORT:-3306}
+    
+    read -p "Database Name (kishankraft_db): " DB_NAME
+    DB_NAME=${DB_NAME:-kishankraft_db}
+    
+    read -p "Database Username (root): " DB_USER
+    DB_USER=${DB_USER:-root}
+    
+    read -s -p "Database Password: " DB_PASS
+    echo ""
+    
+    # Test database connection
+    print_status "Testing database connection..."
+    
+    if mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASS" -e ";" 2>/dev/null; then
+        print_success "Database connection successful"
+    else
+        print_error "Database connection failed. Please check your credentials."
+        exit 1
+    fi
+}
+
+# Setup database
+setup_database() {
+    print_status "Setting up database..."
+    
+    # Create database if it doesn't exist
+    mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASS" -e "CREATE DATABASE IF NOT EXISTS \`$DB_NAME\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" 2>/dev/null
+    print_success "Database '$DB_NAME' created/verified"
+    
+    # Import schema
+    if [ -f "database/schema.sql" ]; then
+        mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASS" "$DB_NAME" < database/schema.sql
+        print_success "Database schema imported"
+    else
+        print_error "Schema file not found: database/schema.sql"
+        exit 1
+    fi
+    
+    # Import sample data
+    read -p "Import sample data? (Y/n): " -n 1 -r
+    echo ""
+    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+        if [ -f "database/sample_data.sql" ]; then
+            mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASS" "$DB_NAME" < database/sample_data.sql
+            print_success "Sample data imported"
+        else
+            print_warning "Sample data file not found: database/sample_data.sql"
+        fi
+    fi
+}
+
+# Create configuration files
+create_config_files() {
+    print_status "Creating configuration files..."
+    
+    # Database configuration
+    cat > backend/config/database.php << EOF
+<?php
+/**
+ * Database Configuration
+ * Generated by KishansKraft Quick Setup
+ */
+
+return [
+    'host' => '$DB_HOST',
+    'port' => $DB_PORT,
+    'database' => '$DB_NAME',
+    'username' => '$DB_USER',
+    'password' => '$DB_PASS',
+    'charset' => 'utf8mb4',
+    'options' => [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+    ]
+];
+EOF
+    
+    # Application configuration
+    JWT_SECRET=$(openssl rand -hex 32)
+    
+    cat > backend/config/app.php << EOF
+<?php
+/**
+ * Application Configuration
+ * Generated by KishansKraft Quick Setup
+ */
+
+return [
+    'site_name' => 'KishansKraft',
+    'site_url' => 'http://localhost:8080',
+    'site_description' => 'Premium cold-pressed oils and organic products directly from farm to kitchen.',
+    'admin_email' => 'admin@kishankraft.com',
+    'jwt_secret' => '$JWT_SECRET',
+    'api_rate_limit' => 100,
+    'session_timeout' => 3600,
+    'debug' => true,
+    'timezone' => 'Asia/Kolkata',
+    'email' => [
+        'enabled' => false,
+        'smtp_host' => '',
+        'smtp_port' => 587,
+        'smtp_user' => '',
+        'smtp_password' => '',
+        'from_email' => 'admin@kishankraft.com',
+        'from_name' => 'KishansKraft'
+    ]
+];
+EOF
+    
+    print_success "Configuration files created"
+}
+
+# Create admin user
+create_admin_user() {
+    print_status "Creating admin user..."
+    
+    read -p "Admin Name (Administrator): " ADMIN_NAME
+    ADMIN_NAME=${ADMIN_NAME:-Administrator}
+    
+    read -p "Admin Email (admin@kishankraft.com): " ADMIN_EMAIL
+    ADMIN_EMAIL=${ADMIN_EMAIL:-admin@kishankraft.com}
+    
+    read -p "Admin Mobile (10-digit number): " ADMIN_MOBILE
+    
+    # Validate mobile number
+    if [[ ! $ADMIN_MOBILE =~ ^[6-9][0-9]{9}$ ]]; then
+        print_error "Please enter a valid 10-digit Indian mobile number"
+        exit 1
+    fi
+    
+    # Insert admin user
+    mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASS" "$DB_NAME" << EOF
+INSERT IGNORE INTO users (name, email, mobile, address, is_verified, created_at) 
+VALUES ('$ADMIN_NAME', '$ADMIN_EMAIL', '$ADMIN_MOBILE', 'Admin Address', 1, NOW());
+EOF
+    
+    print_success "Admin user created"
+}
+
+# Create .htaccess file
+create_htaccess() {
+    if [ ! -f ".htaccess" ]; then
+        print_status "Creating .htaccess file..."
+        
+        cat > .htaccess << 'EOF'
+RewriteEngine On
+
+# API Routes
+RewriteCond %{REQUEST_URI} ^/backend/api/
+RewriteRule ^backend/api/(.*)$ router.php [QSA,L]
+
+# Frontend Routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/backend/
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options DENY
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Deny access to sensitive files
+<Files ~ "\.(log|sql|md)$">
+    Order allow,deny
+    Deny from all
+</Files>
+EOF
+        
+        print_success ".htaccess file created"
+    fi
+}
+
+# Start development server
+start_server() {
+    print_status "Setup complete!"
+    echo ""
+    echo "Your KishansKraft e-commerce platform is ready!"
+    echo ""
+    echo "Access URLs:"
+    echo "  • Main Store: http://localhost:8080/"
+    echo "  • Frontend: http://localhost:8080/frontend/"
+    echo "  • Developer Console: http://localhost:8080/dev-console.html"
+    echo "  • API Base: http://localhost:8080/backend/api/"
+    echo ""
+    echo "Admin Details:"
+    echo "  • Name: $ADMIN_NAME"
+    echo "  • Email: $ADMIN_EMAIL"
+    echo "  • Mobile: $ADMIN_MOBILE"
+    echo ""
+    
+    read -p "Start development server now? (Y/n): " -n 1 -r
+    echo ""
+    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+        print_status "Starting PHP development server..."
+        print_success "Server running at http://localhost:8080"
+        print_status "Press Ctrl+C to stop the server"
+        echo ""
+        php -S localhost:8080
+    else
+        echo "You can start the server manually with:"
+        echo "  php -S localhost:8080"
+    fi
+}
+
+# Main execution
+main() {
+    print_header
+    
+    check_root
+    check_requirements
+    setup_directories
+    get_database_config
+    setup_database
+    create_config_files
+    create_admin_user
+    create_htaccess
+    start_server
+}
+
+# Run main function
+main "$@"
