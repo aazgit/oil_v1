@@ -1,0 +1,80 @@
+[30-Jul-2025 23:24:27 Asia/Kolkata] PHP Notice:  session_start(): Ignoring session_start() because a session is already active (started from /workspaces/oil_v1/backend/utils/Logger.php on line 189) in /workspaces/oil_v1/backend/utils/Logger.php on line 189
+[30-Jul-2025 23:24:27 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Undefined constant PDO::MYSQL_ATTR_INIT_COMMAND in /workspaces/oil_v1/backend/config/Database.php:61
+Stack trace:
+#0 /workspaces/oil_v1/backend/config/Database.php(28): Database->connect()
+#1 /workspaces/oil_v1/backend/config/Database.php(38): Database->__construct()
+#2 /workspaces/oil_v1/backend/core/App.php(35): Database::getInstance()
+#3 /workspaces/oil_v1/backend/core/App.php(439): App->__construct()
+#4 /workspaces/oil_v1/backend/api/products.php(17): getApp()
+#5 {main}
+  thrown in /workspaces/oil_v1/backend/config/Database.php on line 61
+[30-Jul-2025 23:24:27 Asia/Kolkata] PHP Notice:  session_start(): Ignoring session_start() because a session is already active (started from /workspaces/oil_v1/backend/utils/Logger.php on line 189) in /workspaces/oil_v1/backend/utils/Logger.php on line 189
+[30-Jul-2025 23:24:27 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Undefined constant PDO::MYSQL_ATTR_INIT_COMMAND in /workspaces/oil_v1/backend/config/Database.php:61
+Stack trace:
+#0 /workspaces/oil_v1/backend/config/Database.php(28): Database->connect()
+#1 /workspaces/oil_v1/backend/config/Database.php(38): Database->__construct()
+#2 /workspaces/oil_v1/backend/core/App.php(35): Database::getInstance()
+#3 /workspaces/oil_v1/backend/core/App.php(439): App->__construct()
+#4 /workspaces/oil_v1/backend/api/auth.php(18): getApp()
+#5 {main}
+  thrown in /workspaces/oil_v1/backend/config/Database.php on line 61
+[30-Jul-2025 23:26:40 Asia/Kolkata] PHP Notice:  session_start(): Ignoring session_start() because a session is already active (started from /workspaces/oil_v1/backend/utils/Logger.php on line 189) in /workspaces/oil_v1/backend/utils/Logger.php on line 189
+[30-Jul-2025 23:26:40 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Undefined constant PDO::MYSQL_ATTR_INIT_COMMAND in /workspaces/oil_v1/backend/config/Database.php:61
+Stack trace:
+#0 /workspaces/oil_v1/backend/config/Database.php(28): Database->connect()
+#1 /workspaces/oil_v1/backend/config/Database.php(38): Database->__construct()
+#2 /workspaces/oil_v1/backend/core/App.php(35): Database::getInstance()
+#3 /workspaces/oil_v1/backend/core/App.php(439): App->__construct()
+#4 /workspaces/oil_v1/backend/api/products.php(17): getApp()
+#5 {main}
+  thrown in /workspaces/oil_v1/backend/config/Database.php on line 61
+[30-Jul-2025 23:26:40 Asia/Kolkata] PHP Notice:  session_start(): Ignoring session_start() because a session is already active (started from /workspaces/oil_v1/backend/utils/Logger.php on line 189) in /workspaces/oil_v1/backend/utils/Logger.php on line 189
+[30-Jul-2025 23:26:40 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Undefined constant PDO::MYSQL_ATTR_INIT_COMMAND in /workspaces/oil_v1/backend/config/Database.php:61
+Stack trace:
+#0 /workspaces/oil_v1/backend/config/Database.php(28): Database->connect()
+#1 /workspaces/oil_v1/backend/config/Database.php(38): Database->__construct()
+#2 /workspaces/oil_v1/backend/core/App.php(35): Database::getInstance()
+#3 /workspaces/oil_v1/backend/core/App.php(439): App->__construct()
+#4 /workspaces/oil_v1/backend/api/auth.php(18): getApp()
+#5 {main}
+  thrown in /workspaces/oil_v1/backend/config/Database.php on line 61
+[30-Jul-2025 23:27:02 Asia/Kolkata] PHP Notice:  session_start(): Ignoring session_start() because a session is already active (started from /workspaces/oil_v1/backend/utils/Logger.php on line 189) in /workspaces/oil_v1/backend/utils/Logger.php on line 189
+[30-Jul-2025 23:27:02 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Undefined constant PDO::MYSQL_ATTR_INIT_COMMAND in /workspaces/oil_v1/backend/config/Database.php:61
+Stack trace:
+#0 /workspaces/oil_v1/backend/config/Database.php(28): Database->connect()
+#1 /workspaces/oil_v1/backend/config/Database.php(38): Database->__construct()
+#2 /workspaces/oil_v1/backend/core/App.php(35): Database::getInstance()
+#3 /workspaces/oil_v1/backend/core/App.php(439): App->__construct()
+#4 /workspaces/oil_v1/backend/api/auth.php(18): getApp()
+#5 {main}
+  thrown in /workspaces/oil_v1/backend/config/Database.php on line 61
+[30-Jul-2025 23:28:02 Asia/Kolkata] PHP Notice:  session_start(): Ignoring session_start() because a session is already active (started from /workspaces/oil_v1/backend/utils/Logger.php on line 189) in /workspaces/oil_v1/backend/utils/Logger.php on line 189
+[30-Jul-2025 23:28:02 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Undefined constant PDO::MYSQL_ATTR_INIT_COMMAND in /workspaces/oil_v1/backend/config/Database.php:61
+Stack trace:
+#0 /workspaces/oil_v1/backend/config/Database.php(28): Database->connect()
+#1 /workspaces/oil_v1/backend/config/Database.php(38): Database->__construct()
+#2 /workspaces/oil_v1/backend/core/App.php(35): Database::getInstance()
+#3 /workspaces/oil_v1/backend/core/App.php(439): App->__construct()
+#4 /workspaces/oil_v1/backend/api/auth.php(18): getApp()
+#5 {main}
+  thrown in /workspaces/oil_v1/backend/config/Database.php on line 61
+[30-Jul-2025 23:40:04 Asia/Kolkata] PHP Notice:  session_start(): Ignoring session_start() because a session is already active (started from /workspaces/oil_v1/backend/utils/Logger.php on line 189) in /workspaces/oil_v1/backend/utils/Logger.php on line 189
+[30-Jul-2025 23:40:04 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Undefined constant PDO::MYSQL_ATTR_INIT_COMMAND in /workspaces/oil_v1/backend/config/Database.php:61
+Stack trace:
+#0 /workspaces/oil_v1/backend/config/Database.php(28): Database->connect()
+#1 /workspaces/oil_v1/backend/config/Database.php(38): Database->__construct()
+#2 /workspaces/oil_v1/backend/core/App.php(35): Database::getInstance()
+#3 /workspaces/oil_v1/backend/core/App.php(439): App->__construct()
+#4 /workspaces/oil_v1/backend/api/products.php(17): getApp()
+#5 {main}
+  thrown in /workspaces/oil_v1/backend/config/Database.php on line 61
+[30-Jul-2025 23:40:04 Asia/Kolkata] PHP Notice:  session_start(): Ignoring session_start() because a session is already active (started from /workspaces/oil_v1/backend/utils/Logger.php on line 189) in /workspaces/oil_v1/backend/utils/Logger.php on line 189
+[30-Jul-2025 23:40:04 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Undefined constant PDO::MYSQL_ATTR_INIT_COMMAND in /workspaces/oil_v1/backend/config/Database.php:61
+Stack trace:
+#0 /workspaces/oil_v1/backend/config/Database.php(28): Database->connect()
+#1 /workspaces/oil_v1/backend/config/Database.php(38): Database->__construct()
+#2 /workspaces/oil_v1/backend/core/App.php(35): Database::getInstance()
+#3 /workspaces/oil_v1/backend/core/App.php(439): App->__construct()
+#4 /workspaces/oil_v1/backend/api/auth.php(18): getApp()
+#5 {main}
+  thrown in /workspaces/oil_v1/backend/config/Database.php on line 61

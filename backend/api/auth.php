@@ -58,6 +58,10 @@ try {
             handleCheckSession($app, $method);
             break;
             
+        case 'test-login':
+            handleTestLogin($app, $userModel, $method);
+            break;
+            
         default:
             $app->sendJsonResponse(['error' => 'Invalid auth endpoint'], 404);
     }
@@ -128,7 +132,16 @@ function handleVerifyOTP($app, $userModel, $method) {
     $purpose = $validated['purpose'] ?? 'login';
     
     // Verify OTP
-    $isValid = $userModel->verifyOTP($mobile, $otp, $purpose);
+    $isValid = false;
+    
+    // In debug mode, accept universal test OTP
+    if (APP_DEBUG && $otp === '123456') {
+        $isValid = true;
+        // Clean any existing OTP records for this mobile
+        $userModel->verifyOTP($mobile, $otp, $purpose); // This will mark as used
+    } else {
+        $isValid = $userModel->verifyOTP($mobile, $otp, $purpose);
+    }
     
     if ($isValid) {
         if ($purpose === 'login') {
@@ -343,5 +356,76 @@ function handleCheckSession($app, $method) {
             'authenticated' => false
         ]);
     }
+}
+
+/**
+ * Handle test login (development only)
+ * Allows quick login without OTP for testing purposes
+ */
+function handleTestLogin($app, $userModel, $method) {
+    if ($method !== 'POST') {
+        $app->sendJsonResponse(['error' => 'Method not allowed'], 405);
+    }
+    
+    // Only allow in debug mode
+    if (!APP_DEBUG) {
+        $app->sendJsonResponse(['error' => 'Test login not available in production'], 403);
+    }
+    
+    $data = $app->getRequestData('POST');
+    
+    $validated = $app->validateRequest($data, [
+        'mobile' => ['type' => 'mobile', 'required' => true]
+    ]);
+    
+    $mobile = $validated['mobile'];
+    
+    // Check if user exists
+    $user = $userModel->getUserByMobile($mobile);
+    
+    if (!$user) {
+        // For testing, create a temporary user if it doesn't exist
+        $testUserData = [
+            'mobile' => $mobile,
+            'name' => 'Test User - ' . substr($mobile, -4),
+            'email' => 'test' . substr($mobile, -4) . '@kishanskraft.com',
+            'address' => 'Test Address',
+            'city' => 'Test City',
+            'state' => 'Test State',
+            'pincode' => '123456'
+        ];
+        
+        $result = $userModel->createUser($testUserData);
+        
+        if ($result['success']) {
+            // Verify the user immediately
+            $userModel->verifyUser($result['user']['id']);
+            $user = $result['user'];
+        } else {
+            $app->sendJsonResponse(['error' => 'Failed to create test user: ' . $result['message']], 400);
+        }
+    }
+    
+    // Verify user if not already verified
+    if (!$user['is_verified']) {
+        $userModel->verifyUser($user['id']);
+        $user['is_verified'] = true;
+    }
+    
+    // Create session
+    $_SESSION['user_id'] = $user['id'];
+    $_SESSION['user_mobile'] = $user['mobile'];
+    $_SESSION['user_name'] = $user['name'];
+    
+    $app->sendJsonResponse([
+        'message' => 'Test login successful',
+        'warning' => 'This is a test login - only available in development mode',
+        'user' => [
+            'id' => $user['id'],
+            'name' => $user['name'],
+            'mobile' => $user['mobile'],
+            'email' => $user['email']
+        ]
+    ]);
 }
 ?>

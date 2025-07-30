@@ -1,0 +1,21 @@
+================================================================================
+KishansKraft Application Log - 2025-07-30
+Started at: 2025-07-30 23:24:27
+================================================================================
+
+[2025-07-30 23:24:27] [INFO] [App] [User:guest] [IP:223.235.58.202] [ReqID:b5f753c2219bde4f0ae8a0b7fdef8d1f] Application initializing
+[2025-07-30 23:24:27] [INFO] [Database] [User:guest] [IP:223.235.58.202] [ReqID:b5f753c2219bde4f0ae8a0b7fdef8d1f] Attempting database connection | Context: {"host":"localhost","database":"kishanskraft_db","user":"root"}
+[2025-07-30 23:24:27] [INFO] [App] [User:guest] [IP:223.235.58.202] [ReqID:540abd1135f7dd2446a097811b92f1cc] Application initializing
+[2025-07-30 23:24:27] [INFO] [Database] [User:guest] [IP:223.235.58.202] [ReqID:540abd1135f7dd2446a097811b92f1cc] Attempting database connection | Context: {"host":"localhost","database":"kishanskraft_db","user":"root"}
+[2025-07-30 23:26:40] [INFO] [App] [User:guest] [IP:223.235.58.202] [ReqID:05aa65801da3f93ff98587d914e864c4] Application initializing
+[2025-07-30 23:26:40] [INFO] [Database] [User:guest] [IP:223.235.58.202] [ReqID:05aa65801da3f93ff98587d914e864c4] Attempting database connection | Context: {"host":"localhost","database":"kishanskraft_db","user":"root"}
+[2025-07-30 23:26:40] [INFO] [App] [User:guest] [IP:223.235.58.202] [ReqID:7554187fccf85b1f87d324570aedac12] Application initializing
+[2025-07-30 23:26:40] [INFO] [Database] [User:guest] [IP:223.235.58.202] [ReqID:7554187fccf85b1f87d324570aedac12] Attempting database connection | Context: {"host":"localhost","database":"kishanskraft_db","user":"root"}
+[2025-07-30 23:27:02] [INFO] [App] [User:guest] [IP:223.235.58.202] [ReqID:8ffcb6b328de4cf8c56ff203436a9a59] Application initializing
+[2025-07-30 23:27:02] [INFO] [Database] [User:guest] [IP:223.235.58.202] [ReqID:8ffcb6b328de4cf8c56ff203436a9a59] Attempting database connection | Context: {"host":"localhost","database":"kishanskraft_db","user":"root"}
+[2025-07-30 23:28:02] [INFO] [App] [User:guest] [IP:223.235.58.202] [ReqID:b0e292e637e17d79a68954016385dbb6] Application initializing
+[2025-07-30 23:28:02] [INFO] [Database] [User:guest] [IP:223.235.58.202] [ReqID:b0e292e637e17d79a68954016385dbb6] Attempting database connection | Context: {"host":"localhost","database":"kishanskraft_db","user":"root"}
+[2025-07-30 23:40:04] [INFO] [App] [User:guest] [IP:223.235.58.202] [ReqID:2ef9a4b31e6f455c062d10668baafa63] Application initializing
+[2025-07-30 23:40:04] [INFO] [Database] [User:guest] [IP:223.235.58.202] [ReqID:2ef9a4b31e6f455c062d10668baafa63] Attempting database connection | Context: {"host":"localhost","database":"kishanskraft_db","user":"root"}
+[2025-07-30 23:40:04] [INFO] [App] [User:guest] [IP:223.235.58.202] [ReqID:10aa889988c5f946d2ff9811905a1b5f] Application initializing
+[2025-07-30 23:40:04] [INFO] [Database] [User:guest] [IP:223.235.58.202] [ReqID:10aa889988c5f946d2ff9811905a1b5f] Attempting database connection | Context: {"host":"localhost","database":"kishanskraft_db","user":"root"}
